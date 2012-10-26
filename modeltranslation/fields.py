@@ -88,15 +88,6 @@ class TranslationField(object):
         self.verbose_name = build_localized_verbose_name(
             translated_field.verbose_name, language)
 
-    def pre_save(self, model_instance, add):
-        val = self.translated_field.__class__.pre_save(
-            self, model_instance, add)
-        if mt_settings.DEFAULT_LANGUAGE == self.language and not add:
-            # Rule is: 3. Assigning a value to a translation field of the
-            # default language also updates the original field
-            model_instance.__dict__[self.translated_field.attname] = val
-        return val
-
     def get_prep_value(self, value):
         if value == '':
             value = None
